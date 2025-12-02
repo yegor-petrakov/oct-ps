@@ -1,0 +1,21 @@
+<?php
+
+use App\Http\Controllers\Auth\LoginController;
+use Illuminate\Support\Facades\Route;
+
+Route::middleware('guest')->group(function () {
+    Route::get('login', [LoginController::class, 'create'])->name('login');
+    Route::post('login', [LoginController::class, 'store']);
+});
+
+Route::post('logout', [LoginController::class, 'destroy'])->name('logout');
+
+// Route::middleware('auth')->group(function () {
+//     Route::get('verify-email', [VerificationController::class, 'notice'])->name('verification.notice');
+//     Route::post('verify-email', [VerificationController::class, 'store'])->middleware('throttle:6,1')->name('verification.store');
+//     Route::get('verify-email/{id}/{hash}', [VerificationController::class, 'verify'])->middleware(['signed', 'throttle:6,1'])->name('verification.verify');
+
+//     Route::get('confirm-password', [ConfirmationController::class, 'create'])->name('password.confirm');
+//     Route::post('confirm-password', [ConfirmationController::class, 'store'])->name('confirmation.store');
+// });
+

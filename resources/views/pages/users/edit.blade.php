@@ -1,0 +1,126 @@
+<x-layouts.app>
+    <x-layouts.partials.breadcrumbs :links="[
+        ['label' => 'Дашборд', 'url' => route('dashboard')],
+        ['label' => 'Пользователи', 'url' => route('users.index')],
+        ['label' => '@' . $user->username, 'url' => route('users.overview', $user)],
+        ['label' => 'Редактирование', 'url' => '#']
+    ]" />
+
+    <x-layouts.content>
+        <form 
+            autocomplete="off"
+            action="{{ route('users.update', $user) }}" 
+            method="POST"
+            class="w-full mx-auto mt-10 space-y-6"
+        >
+            @csrf
+            @method('PUT')
+
+            <div>
+                <x-forms.label text="Имя пользователя" for="username" />
+                <x-forms.input 
+                    name="username" 
+                    type="text" 
+                    value="{{ old('username', $user->username) }}"
+                    required    
+                />
+                <x-forms.error field="username" />
+            </div>
+
+            <div class="grid grid-cols-3 gap-4">
+                <div>
+                    <x-forms.label text="Имя" for="first_name" />
+                    <x-forms.input 
+                        name="first_name" 
+                        type="text" 
+                        value="{{ old('first_name', $user->first_name) }}"
+                        required    
+                    />
+                    <x-forms.error field="first_name" />
+                </div>
+    
+                <div>
+                    <x-forms.label text="Фамилия" for="last_name" />
+                    <x-forms.input 
+                        name="last_name" 
+                        type="text" 
+                        value="{{ old('last_name', $user->last_name) }}"
+                    />
+                    <x-forms.error field="last_name" />
+                </div>
+    
+                <div>
+                    <x-forms.label text="Отчество" for="middle_name" />
+                    <x-forms.input 
+                        name="middle_name" 
+                        type="text" 
+                        value="{{ old('middle_name', $user->middle_name) }}"
+                    />
+                    <x-forms.error field="middle_name" />
+                </div>
+            </div>
+
+            <div>
+                <x-forms.label text="Электронная почта" for="email" />
+                <x-forms.input 
+                    name="email" 
+                    type="email" 
+                    value="{{ old('email', $user->email) }}"
+                />
+                <x-forms.error field="email" />
+            </div>
+
+            <div>
+                <x-forms.label text="Телефон" for="phone" />
+                <x-forms.input 
+                    name="phone" 
+                    type="text" 
+                    value="{{ old('phone', $user->phone) }}"
+                />
+                <x-forms.error field="phone" />
+            </div>
+
+            <div>
+                <x-forms.label for="roles[]" text="Роли" />
+                <div class="flex flex-wrap gap-2 mt-1">
+                    @foreach($roles as $role)
+                        <label class="inline-flex items-center gap-1 border border-slate-200 rounded px-2 py-1 cursor-pointer">
+                            <input 
+                                type="checkbox" 
+                                name="roles[]" 
+                                value="{{ $role->id }}" 
+                                {{ $user->roles->contains($role) ? 'checked' : '' }}
+                            />
+                            <span>{{ ucfirst($role->name) }}</span>
+                        </label>
+                    @endforeach
+                </div>
+            </div>
+
+            
+            <div>
+                <x-forms.label text="Новый пароль" for="password" />
+                <x-forms.input 
+                    name="password" 
+                    type="password" 
+                    autocomplete="new-password"
+                />
+                <x-forms.error field="password" />
+            </div>
+            
+
+            <div>
+                <label class="inline-flex items-center gap-2">
+                    <input type="checkbox" name="is_archived" value="1" {{ $user->is_archived ? 'checked' : '' }}>
+                    <span>Архивировать пользователя</span>
+                </label>
+            </div>
+
+            <div class="flex justify-end gap-3 border-t border-slate-200 pt-6">
+                <x-shared.button variant="ghost" href="{{ route('users.overview', parameters: $user) }}">Отмена</x-shared.button>
+                <x-shared.button variant="approve" type="submit">Создать</x-shared.button>
+            </div>
+
+        </form>
+    </x-layouts.content>
+</x-layouts.app>
